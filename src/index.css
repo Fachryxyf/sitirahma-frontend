@@ -1,16 +1,8 @@
 /* src/index.css */
-
-/* Keyframes untuk animasi gradien */
-@keyframes background-pan {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+@keyframes app-background-pan {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 body {
@@ -21,10 +13,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
-  /* Gradien animasi premium sebagai latar belakang utama */
-  background: linear-gradient(-45deg, #eef2f7, #e0e7ff, #f0f9ff, #eef2f7);
+  background: linear-gradient(-45deg, #f4f7fc, #eef2f7, #e6e9f0, #f4f7fc);
   background-size: 400% 400%;
-  animation: background-pan 25s ease infinite;
+  animation: app-background-pan 30s ease infinite;
+  color: #34495e; /* Warna teks default yang konsisten */
 }
 
 * {

@@ -11,7 +11,7 @@ const Header = () => {
 
   const handleLogout = () => {
     setIsMenuOpen(false);
-    navigate('/login');
+    navigate('/auth');
   };
   
   const closeMenu = () => setIsMenuOpen(false);
@@ -25,15 +25,23 @@ const Header = () => {
           <span className="logo-text">Perpustakaan Digital</span>
         </div>
         
-        {/* Navigasi Desktop (tidak berubah) */}
-        <nav className="main-nav-desktop">
-          {/* ... link-link NavLink ... */}
-        </nav>
-        <div className="logout-wrapper-desktop">
-            <button onClick={handleLogout} className="logout-button">
-                <FaSignOutAlt />
-                <span>Logout</span>
-            </button>
+        <div className="nav-wrapper">
+          {/* Navigasi untuk Desktop */}
+          <nav className="main-nav-desktop">
+            <NavLink to="/" end className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Pencarian</NavLink>
+            <NavLink to="/tentang" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Tentang</NavLink>
+            <NavLink to="/info-sistem" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Info Sistem</NavLink>
+            <NavLink to="/tutorial" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Tutorial</NavLink>
+            <NavLink to="/credits" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Credits</NavLink>
+          </nav>
+          
+          {/* Tombol Logout untuk Desktop */}
+          <div className="logout-wrapper-desktop">
+              <button onClick={handleLogout} className="logout-button">
+                  <FaSignOutAlt />
+                  <span>Logout</span>
+              </button>
+          </div>
         </div>
 
         {/* Tombol Hamburger untuk Mobile */}
@@ -42,7 +50,7 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Menu Dropdown untuk Mobile */}
+      {/* Menu Dropdown untuk Mobile (tidak berubah) */}
       {isMenuOpen && (
         <nav className="mobile-menu-dropdown">
           <NavLink to="/" end onClick={closeMenu} className="mobile-nav-link">Pencarian</NavLink>

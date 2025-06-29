@@ -1,7 +1,7 @@
 /* src/components/Header.css */
 
 .app-header {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -11,36 +11,45 @@
   z-index: 100;
   height: 70px;
 }
+
 .header-container {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* PERUBAHAN UTAMA: Memastikan logo di kiri, sisa di kanan */
+  justify-content: space-between; 
   height: 100%;
 }
+
 .logo-container {
   display: flex;
   align-items: center;
   gap: 12px;
   color: #2c3e50;
 }
+
 .logo-icon {
   font-size: 1.8rem;
 }
+
 .logo-text {
   font-size: 1.25rem;
   font-weight: 700;
 }
+
+/* Wrapper untuk navigasi dan tombol logout di kanan */
 .nav-wrapper {
   display: flex;
   align-items: center;
   gap: 32px;
 }
+
 .main-nav-desktop {
   display: flex;
   gap: 10px;
 }
+
 .nav-link {
   text-decoration: none;
   color: #4a5568;
@@ -50,14 +59,21 @@
   position: relative;
   transition: all 0.3s ease;
 }
+
 .nav-link:hover {
   background-color: #f1f5f9;
   color: #2c3e50;
 }
+
 .nav-link.active {
   background-color: #34495e;
   color: white;
 }
+
+.logout-wrapper-desktop {
+    display: block; /* Pastikan terlihat */
+}
+
 .logout-button {
   display: flex;
   align-items: center;
@@ -71,6 +87,7 @@
   font-weight: 500;
   transition: all 0.2s ease-in-out;
 }
+
 .logout-button:hover {
   background-color: #e74c3c;
   border-color: #c0392b;
@@ -109,16 +126,11 @@
   left: 0;
   width: 100%;
   padding: 20px;
-
-  /* Efek Glassmorphism sesuai referensi */
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.99);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  
-  /* Animasi turun dari atas */
   animation: slideDown 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   display: flex;
   flex-direction: column;

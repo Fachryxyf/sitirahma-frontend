@@ -2,46 +2,15 @@
 
 .homepage-container {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1200px; /* Disesuaikan untuk 2 kolom yang lebih nyaman */
   margin: 0 auto;
-  padding: 24px;
-  padding-bottom: 60px; /* Jarak tambahan di bawah */
-}
-
-.homepage-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #eef2f7;
-}
-
-.welcome-text {
-  font-size: 1.25rem;
-  color: #2c3e50;
-}
-
-.logout-button {
-  padding: 8px 16px;
-  border: 1px solid #d1d5db;
-  background-color: transparent;
-  color: #4a5568;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
-}
-
-.logout-button:hover {
-  background-color: #f9fafb;
-  border-color: #9ca3af;
-  color: #2c3e50;
+  padding: 24px 40px;
+  padding-bottom: 60px;
 }
 
 .search-section {
   background-color: white;
-  padding: 32px;
+  padding: 40px; /* Padding lebih besar untuk kesan premium */
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
   text-align: center;
@@ -51,7 +20,7 @@
 .search-section h2 {
   margin-top: 0;
   margin-bottom: 8px;
-  font-size: 1.75rem;
+  font-size: 2rem; /* Sedikit lebih besar */
   color: #2c3e50;
 }
 
@@ -102,22 +71,26 @@
 }
 
 .download-report-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin-top: 24px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: 1px solid #27ae60;
-  background-color: #f0fff4;
-  color: #27ae60;
-  font-size: 0.9rem;
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: 2px solid #34495e;
+  background-color: transparent;
+  color: #34495e;
+  font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .download-report-button:hover {
-  background-color: #27ae60;
+  background-color: #34495e;
   color: white;
-  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(52, 73, 94, 0.2);
 }
 
 .results-section {
@@ -141,40 +114,24 @@
 
 .books-grid-horizontal {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-  gap: 24px;
+  /* Perbaikan Utama: Selalu 2 kolom di layar lebar */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
 }
 
-.download-report-button {
-  display: inline-flex; /* Agar ikon dan teks sejajar */
-  align-items: center;
-  gap: 8px; /* Jarak antara ikon dan teks */
-  margin-top: 24px;
-  padding: 12px 24px;
-  border-radius: 10px;
-  border: 2px solid #34495e; /* Border dengan warna tema */
-  background-color: transparent; /* Latar transparan */
-  color: #34495e; /* Warna teks sesuai tema */
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+/* --- Media Queries untuk Responsif --- */
 
-.download-report-button:hover {
-  background-color: #34495e; /* Latar terisi saat disentuh */
-  color: white; /* Teks jadi putih */
-  transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(52, 73, 94, 0.2);
+@media (max-width: 960px) {
+  /* Di layar tablet, ubah grid menjadi 1 kolom */
+  .books-grid-horizontal {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 }
 
 @media (max-width: 768px) {
+  /* Di layar mobile, buat form pencarian menjadi vertikal */
   .search-form {
-    flex-direction: column; /* Ubah form menjadi vertikal */
-  }
-  
-  .books-grid-horizontal {
-    /* Ubah lebar minimal kartu agar muat di layar hp */
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    flex-direction: column;
   }
 }
