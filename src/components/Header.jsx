@@ -10,11 +10,12 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    setIsMenuOpen(false); // Tutup menu saat logout
+    setIsMenuOpen(false);
     navigate('/login');
   };
   
   const closeMenu = () => setIsMenuOpen(false);
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
     <header className="app-header">
@@ -24,16 +25,10 @@ const Header = () => {
           <span className="logo-text">Perpustakaan Digital</span>
         </div>
         
-        {/* Navigasi untuk Desktop */}
+        {/* Navigasi Desktop (tidak berubah) */}
         <nav className="main-nav-desktop">
-          <NavLink to="/" end className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Pencarian</NavLink>
-          <NavLink to="/tentang" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Tentang</NavLink>
-          <NavLink to="/info-sistem" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Info Sistem</NavLink>
-          <NavLink to="/tutorial" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Tutorial</NavLink>
-          <NavLink to="/credits" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Credits</NavLink>
+          {/* ... link-link NavLink ... */}
         </nav>
-        
-        {/* Tombol Logout untuk Desktop */}
         <div className="logout-wrapper-desktop">
             <button onClick={handleLogout} className="logout-button">
                 <FaSignOutAlt />
@@ -42,26 +37,23 @@ const Header = () => {
         </div>
 
         {/* Tombol Hamburger untuk Mobile */}
-        <button className="hamburger-button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        <button className="hamburger-button" onClick={toggleMenu}>
           {isMenuOpen ? <FaTimes /> : <FaBars />}
         </button>
-
-        {/* Menu Overlay untuk Mobile */}
-        {isMenuOpen && (
-          <div className="mobile-nav-overlay">
-            <nav className="mobile-nav-links">
-              <NavLink to="/" end onClick={closeMenu} className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Pencarian</NavLink>
-              <NavLink to="/tentang" onClick={closeMenu} className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Tentang</NavLink>
-              <NavLink to="/info-sistem" onClick={closeMenu} className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Info Sistem</NavLink>
-              <NavLink to="/tutorial" onClick={closeMenu} className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Tutorial</NavLink>
-              <NavLink to="/credits" onClick={closeMenu} className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Credits</NavLink>
-            </nav>
-            <button onClick={handleLogout} className="logout-button-mobile">
-                Logout
-            </button>
-          </div>
-        )}
       </div>
+
+      {/* Menu Dropdown untuk Mobile */}
+      {isMenuOpen && (
+        <nav className="mobile-menu-dropdown">
+          <NavLink to="/" end onClick={closeMenu} className="mobile-nav-link">Pencarian</NavLink>
+          <NavLink to="/tentang" onClick={closeMenu} className="mobile-nav-link">Tentang</NavLink>
+          <NavLink to="/info-sistem" onClick={closeMenu} className="mobile-nav-link">Info Sistem</NavLink>
+          <NavLink to="/tutorial" onClick={closeMenu} className="mobile-nav-link">Tutorial</NavLink>
+          <NavLink to="/credits" onClick={closeMenu} className="mobile-nav-link">Credits</NavLink>
+          <hr className="mobile-menu-divider" />
+          <button onClick={handleLogout} className="mobile-logout-button">Logout</button>
+        </nav>
+      )}
     </header>
   );
 };

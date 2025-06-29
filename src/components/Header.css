@@ -81,6 +81,7 @@
 /* --- PERUBAHAN BESAR PADA TAMPILAN MOBILE --- */
 /* ------------------------------------------------ */
 
+/* Tombol hamburger hanya muncul di mobile */
 .hamburger-button {
   display: none;
   font-size: 1.5rem;
@@ -88,99 +89,85 @@
   border: none;
   color: #2c3e50;
   cursor: pointer;
-  z-index: 1001; /* Harus di atas overlay */
-  transition: transform 0.3s ease;
+  z-index: 1100; /* Paling atas */
 }
 
-.hamburger-button:hover {
-    transform: scale(1.1);
-}
-
-.mobile-nav-overlay {
-  /* Diatur oleh state, tapi style awalnya disembunyikan */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  
-  /* Latar belakang abu-abu transparan premium */
-  background-color: rgba(44, 62, 80, 0.95);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  
-  /* Animasi masuk dan keluar */
-  opacity: 0;
-  transform: translateY(-20px);
-  animation: fadeInNav 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  
-  z-index: 1000;
-}
-
-@keyframes fadeInNav {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.mobile-nav-links {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  list-style: none;
-  padding: 0;
-}
-
-.mobile-nav-links .nav-link {
-  font-size: 1.8rem;
-  color: #ecf0f1; /* Warna teks cerah di atas latar gelap */
-  font-weight: 500;
-  padding: 10px 20px;
-}
-
-.mobile-nav-links .nav-link.active {
-  background-color: transparent;
-  color: #fff;
-  border-bottom: 2px solid #fff;
-  border-radius: 0;
-}
-
-.logout-button-mobile {
-  margin-top: 50px;
-  padding: 14px 40px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  background: transparent;
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.logout-button-mobile:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-
-/* --- Media Query untuk mengaktifkan tampilan mobile --- */
-@media (max-width: 900px) { /* Diperlebar agar menu mobile muncul lebih awal */
-  .app-header {
-    padding: 0 20px;
-  }
-  
-  /* Sembunyikan navigasi dan logout versi desktop */
+/* Sembunyikan navigasi desktop di mobile */
+@media (max-width: 900px) {
   .main-nav-desktop, .logout-wrapper-desktop {
     display: none;
   }
-  
-  /* Tampilkan tombol hamburger */
   .hamburger-button {
     display: block;
   }
+}
+
+/* Style untuk menu dropdown mobile */
+.mobile-menu-dropdown {
+  position: absolute;
+  top: 70px; /* Muncul tepat di bawah header */
+  left: 0;
+  width: 100%;
+  padding: 20px;
+
+  /* Efek Glassmorphism sesuai referensi */
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  
+  /* Animasi turun dari atas */
+  animation: slideDown 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.mobile-nav-link {
+  display: block;
+  width: 100%;
+  padding: 15px 20px;
+  text-decoration: none;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.mobile-nav-link:hover, .mobile-nav-link.active {
+  background-color: rgba(52, 73, 94, 0.1); /* Latar semi transparan */
+}
+
+.mobile-menu-divider {
+  border: none;
+  height: 1px;
+  background-color: rgba(44, 62, 80, 0.15);
+  margin: 10px 0;
+}
+
+.mobile-logout-button {
+  width: 100%;
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: #e74c3c;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
 }
