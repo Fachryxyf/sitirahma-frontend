@@ -128,3 +128,16 @@
   width: 100%; /* Pastikan judul rata kiri */
   text-align: left;
 }
+
+@media (max-width: 480px) {
+  .book-card-horizontal {
+    flex-direction: column; /* Ubah kartu menjadi vertikal */
+    align-items: stretch;
+  }
+
+  .book-card-cover {
+    width: 100%; /* Gambar mengisi lebar kartu */
+    height: 200px; /* Tinggi gambar disesuaikan */
+    flex-shrink: 1;
+  }
+}

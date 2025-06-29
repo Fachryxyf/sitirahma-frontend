@@ -132,3 +132,13 @@
   border-color: #3498db;
   cursor: help;
 }
+
+@media (max-width: 768px) {
+  .content-page-wrapper {
+    margin-top: 20px;
+    padding: 20px;
+  }
+  .content-page-wrapper h1 {
+    font-size: 2rem;
+  }
+}

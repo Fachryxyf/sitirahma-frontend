@@ -167,3 +167,14 @@
   transform: translateY(-2px);
   box-shadow: 0 8px 15px rgba(52, 73, 94, 0.2);
 }
+
+@media (max-width: 768px) {
+  .search-form {
+    flex-direction: column; /* Ubah form menjadi vertikal */
+  }
+  
+  .books-grid-horizontal {
+    /* Ubah lebar minimal kartu agar muat di layar hp */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
