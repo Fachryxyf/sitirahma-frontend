@@ -1,15 +1,18 @@
 // src/components/BookCard.jsx
+
 import React from 'react';
+import { useAuth } from '../hooks/useAuth.js';
 import './BookCard.css';
 
 const BookCard = ({ book, onReadMore }) => {
+  const { user } = useAuth(); // Dapatkan informasi pengguna
+
   return (
     <div className="book-card-horizontal">
-      {/* Skor sekarang adalah poin, bukan persen */}
-      {book.score && book.score > 0 && (
+      {/* PERUBAHAN: Tampilkan skor HANYA jika pengguna adalah ADMIN dan skor ada */}
+      {user?.role === 'ROLE_ADMIN' && book.score > 0 && (
         <div className="book-card-score">
-          {/* Menampilkan skor dengan 1 desimal */}
-          Skor: {book.score.toFixed(1)}
+          Skor: {book.score.toFixed(3)}
         </div>
       )}
 
@@ -19,11 +22,14 @@ const BookCard = ({ book, onReadMore }) => {
         className="book-card-cover" 
       />
       <div className="book-card-details">
-        <span className="book-card-category">{book.kategori}</span>
+        <div className="book-card-header">
+          <span className="book-card-category">{book.kategori}</span>
+        </div>
+
         <h3 className="book-card-title">{book.judul}</h3>
         <p className="book-card-author">oleh {book.penulis}</p>
         <p className="book-card-synopsis">
-          {book.sinopsis.substring(0, 120)}...
+          {book.sinopsis.substring(0, 100)}...
         </p>
         <button onClick={() => onReadMore(book)} className="read-more-btn">
           Baca Selengkapnya

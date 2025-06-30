@@ -7,10 +7,13 @@ import { generatePdfReport } from '../services/pdfReportService.js';
 import BookCard from '../components/BookCard';
 import BookDetailModal from '../components/BookDetailModal';
 import DialogBox from '../components/DialogBox';
+import { useAuth } from '../hooks/useAuth.js'; // Impor useAuth
 import { FaFilePdf } from 'react-icons/fa';
 import './HomePage.css';
 
 const HomePage = () => {
+  const { user } = useAuth(); // Dapatkan informasi pengguna dari konteks
+  
   const [allBooks, setAllBooks] = useState([]);
   const [displayedBooks, setDisplayedBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,30 +23,18 @@ const HomePage = () => {
   const [dialog, setDialog] = useState({ isOpen: false, message: '', type: 'info' });
 
   useEffect(() => {
-    // Memuat data awal saat komponen pertama kali render
-    const loadInitialData = () => {
-      setIsLoading(true);
-      // Simulasi jeda untuk UX
-      setTimeout(() => {
-        setAllBooks(fallbackData);
-        setDisplayedBooks(fallbackData);
-        setIsLoading(false);
-      }, 1000);
-    };
-    loadInitialData();
+    // Logika untuk memuat data awal
+    setAllBooks(fallbackData);
+    setDisplayedBooks(fallbackData);
+    setIsLoading(false);
   }, []);
-
+  
   const handleSearch = (event) => {
     event.preventDefault();
     if (!searchQuery.trim()) {
-      setDialog({ 
-        isOpen: true, 
-        message: 'Harap masukkan kata kunci pencarian terlebih dahulu.', 
-        type: 'warning' 
-      });
+      setDialog({ isOpen: true, message: 'Harap masukkan kata kunci pencarian.', type: 'warning' });
       return;
     }
-    
     const result = searchAndRecommend(searchQuery, allBooks);
     setDisplayedBooks(result.sortedBooks);
     setSearchResult(result);
@@ -53,11 +44,7 @@ const HomePage = () => {
     if (searchResult && searchResult.sortedBooks.length > 0) {
       generatePdfReport(searchResult);
     } else {
-      setDialog({ 
-        isOpen: true, 
-        message: 'Lakukan pencarian yang menghasilkan data sebelum membuat laporan.', 
-        type: 'info' 
-      });
+      setDialog({ isOpen: true, message: 'Lakukan pencarian yang menghasilkan data sebelum membuat laporan.', type: 'info' });
     }
   };
 
@@ -75,7 +62,6 @@ const HomePage = () => {
 
   return (
     <div className="homepage-container">
-      {/* Komponen DialogBox untuk notifikasi */}
       {dialog.isOpen && (
         <DialogBox
           message={dialog.message}
@@ -84,7 +70,7 @@ const HomePage = () => {
         />
       )}
 
-      {/* Header telah dipindahkan ke komponen Layout */}
+      {/* Header sudah ada di komponen Layout */}
       <main>
         <section className="search-section">
           <h2>Pencarian Buku</h2>
@@ -101,8 +87,9 @@ const HomePage = () => {
               Cari
             </button>
           </form>
-          {/* Tombol download hanya muncul setelah ada hasil pencarian */}
-          {searchResult && (
+          
+          {/* PERUBAHAN: Tombol download hanya muncul jika ada hasil DAN peran adalah ADMIN */}
+          {searchResult && user?.role === 'ROLE_ADMIN' && (
             <button onClick={handleDownloadReport} className="download-report-button">
               <FaFilePdf />
               <span>Download Laporan Analisis</span>
@@ -127,7 +114,6 @@ const HomePage = () => {
         </section>
       </main>
 
-      {/* Komponen Modal untuk Detail Buku */}
       <BookDetailModal book={selectedBook} onClose={handleCloseModal} />
     </div>
   );

@@ -3,44 +3,76 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DialogBox from '../components/DialogBox';
+import LoadingModal from '../components/LoadingModal'; // Impor modal loading
+import { useAuth } from '../hooks/useAuth';
+import { registerUser, loginUser } from '../services/apiService';
 import './AuthPage.css';
 
 const AuthPage = () => {
   const [isRightPanelActive, setIsRightPanelActive] = useState(false);
   
-  // State untuk form (tidak berubah)
+  // State untuk form
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [registerName, setRegisterName] = useState('');
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
 
+  // State BARU untuk loading modal
+  const [isLoading, setIsLoading] = useState(false);
+
   const [dialog, setDialog] = useState({ isOpen: false, message: '', type: 'info' });
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const closeDialog = () => setDialog({ isOpen: false, message: '', type: 'info' });
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     if (!loginEmail || !loginPassword) {
       setDialog({ isOpen: true, message: 'Harap isi semua field.', type: 'warning' });
       return;
     }
-    navigate('/');
+    setIsLoading(true); // Tampilkan modal loading
+    try {
+      const response = await loginUser({ username: loginEmail, password: loginPassword });
+      auth.login(response.data.token);
+      navigate('/');
+    } catch (error) {
+      const message = error.response?.data?.message || 'Login Gagal. Periksa kembali data Anda.';
+      setDialog({ isOpen: true, message: message, type: 'error' });
+    } finally {
+      setIsLoading(false); // Sembunyikan modal loading
+    }
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     if (!registerName || !registerEmail || !registerPassword) {
       setDialog({ isOpen: true, message: 'Harap isi semua field.', type: 'warning' });
       return;
     }
-    setDialog({ isOpen: true, message: 'Registrasi Berhasil! Silakan Login.', type: 'success' });
-    setIsRightPanelActive(false);
+    setIsLoading(true); // Tampilkan modal loading
+    try {
+      await registerUser({ 
+        namaLengkap: registerName, 
+        username: registerEmail,
+        email: registerEmail,
+        password: registerPassword 
+      });
+      setDialog({ isOpen: true, message: 'Registrasi Berhasil! Silakan Login.', type: 'success' });
+      setIsRightPanelActive(false);
+    } catch (error) {
+      const message = error.response?.data?.message || 'Registrasi gagal.';
+      setDialog({ isOpen: true, message: message, type: 'error' });
+    } finally {
+      setIsLoading(false); // Sembunyikan modal loading
+    }
   };
 
   return (
     <div className="auth-body">
+      {isLoading && <LoadingModal />} {/* Render modal loading jika isLoading true */}
       {dialog.isOpen && <DialogBox message={dialog.message} type={dialog.type} onClose={closeDialog} />}
 
       <div className={`auth-container ${isRightPanelActive ? "right-panel-active" : ""}`} id="container">
@@ -53,7 +85,6 @@ const AuthPage = () => {
             <input type="email" placeholder="Email" value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} />
             <input type="password" placeholder="Password" value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} />
             <button type="submit">Daftar</button>
-            {/* Link untuk mobile */}
             <p className="mobile-toggle-text">
               Sudah punya akun? <span onClick={() => setIsRightPanelActive(false)}>Login</span>
             </p>
@@ -68,7 +99,6 @@ const AuthPage = () => {
             <input type="password" placeholder="Password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
             <a href="#">Lupa password?</a>
             <button type="submit">Login</button>
-            {/* Link untuk mobile */}
             <p className="mobile-toggle-text">
               Belum punya akun? <span onClick={() => setIsRightPanelActive(true)}>Daftar</span>
             </p>

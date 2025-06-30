@@ -1,0 +1,32 @@
+/* src/components/LoadingModal.css */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7); /* Latar putih transparan */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000; /* Paling atas */
+  transition: opacity 0.3s ease;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(52, 73, 94, 0.2);
+  border-top-color: #34495e; /* Warna tema */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
