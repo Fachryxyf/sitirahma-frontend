@@ -2,17 +2,17 @@
 
 .homepage-container {
   width: 100%;
-  max-width: 1200px; /* Disesuaikan untuk 2 kolom yang lebih nyaman */
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 24px 40px;
+  padding: 40px;
   padding-bottom: 60px;
 }
 
 .search-section {
   background-color: white;
-  padding: 40px; /* Padding lebih besar untuk kesan premium */
+  padding: 40px;
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 10px 30px rgba(44, 62, 80, 0.08);
   text-align: center;
   margin-bottom: 40px;
 }
@@ -20,7 +20,7 @@
 .search-section h2 {
   margin-top: 0;
   margin-bottom: 8px;
-  font-size: 2rem; /* Sedikit lebih besar */
+  font-size: 2rem;
   color: #2c3e50;
 }
 
@@ -70,6 +70,28 @@
   transform: translateY(-1px);
 }
 
+.reset-button {
+  flex-shrink: 0; /* Mencegah tombol menyusut */
+  padding: 14px;
+  width: 50px; /* Membuat tombol jadi kotak */
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background-color: #f8f9fa;
+  color: #4a5568;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.reset-button:hover {
+  border-color: #34495e;
+  background-color: #eef2f7;
+  transform: rotate(90deg); /* Animasi ikon berputar saat hover */
+}
+
 .download-report-button {
   display: inline-flex;
   align-items: center;
@@ -95,6 +117,21 @@
 
 .results-section {
   margin-top: 40px;
+  /* PERBAIKAN: Gunakan flexbox untuk menengahkan semua isinya */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px; /* Jarak antara judul hasil dan grid/pesan */
+}
+
+.results-title {
+  font-size: 1.5rem;
+  color: #34495e;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eef2f7;
+  text-align: center;
+  width: 100%;
+  margin: 0; /* Hapus margin default */
 }
 
 .loading-spinner {
@@ -104,7 +141,7 @@
   border-top: 6px solid #34495e;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin: 48px auto;
+  margin-top: 48px;
 }
 
 @keyframes spin {
@@ -114,15 +151,24 @@
 
 .books-grid-horizontal {
   display: grid;
-  /* Perbaikan Utama: Selalu 2 kolom di layar lebar */
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 2fr);
   gap: 32px;
+  width: 100%;
 }
 
-/* --- Media Queries untuk Responsif --- */
+.no-books-message {
+  text-align: center;
+  color: #718096;
+  padding: 40px 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  max-width: 1240px;
+  width: 100%;
+}
+
+/* --- Media Queries --- */
 
 @media (max-width: 960px) {
-  /* Di layar tablet, ubah grid menjadi 1 kolom */
   .books-grid-horizontal {
     grid-template-columns: 1fr;
     gap: 24px;
@@ -130,7 +176,6 @@
 }
 
 @media (max-width: 768px) {
-  /* Di layar mobile, buat form pencarian menjadi vertikal */
   .search-form {
     flex-direction: column;
   }

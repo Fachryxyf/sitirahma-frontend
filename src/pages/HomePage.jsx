@@ -1,50 +1,99 @@
 // src/pages/HomePage.jsx
 
-import React, { useState, useEffect } from 'react';
-import { books as fallbackData } from '../data/books';
-import { searchAndRecommend } from '../services/recommendationEngine.js';
+import React, { useState, useEffect, useCallback } from 'react'; // Impor useCallback
+import { FaFilePdf, FaSyncAlt } from 'react-icons/fa'; // Impor ikon reset
+import { searchBooks, getBooksByIds } from '../services/apiService.js';
 import { generatePdfReport } from '../services/pdfReportService.js';
 import BookCard from '../components/BookCard';
 import BookDetailModal from '../components/BookDetailModal';
 import DialogBox from '../components/DialogBox';
-import { useAuth } from '../hooks/useAuth.js'; // Impor useAuth
-import { FaFilePdf } from 'react-icons/fa';
+import { useAuth } from '../hooks/useAuth.js';
 import './HomePage.css';
 
 const HomePage = () => {
-  const { user } = useAuth(); // Dapatkan informasi pengguna dari konteks
+  const { user } = useAuth();
   
-  const [allBooks, setAllBooks] = useState([]);
   const [displayedBooks, setDisplayedBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [pageTitle, setPageTitle] = useState("Selamat Datang!");
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState(null);
   const [selectedBook, setSelectedBook] = useState(null);
   const [dialog, setDialog] = useState({ isOpen: false, message: '', type: 'info' });
 
-  useEffect(() => {
-    // Logika untuk memuat data awal
-    setAllBooks(fallbackData);
-    setDisplayedBooks(fallbackData);
+  // PERBAIKAN: Logika load data awal dipisahkan agar bisa dipanggil ulang
+  const loadInitialData = useCallback(async () => {
+    setIsLoading(true);
+    const lastSearchIds = JSON.parse(localStorage.getItem(`last_search_${user?.username}`));
+    
+    if (lastSearchIds && lastSearchIds.length > 0) {
+      try {
+        setPageTitle("Berdasarkan Pencarian Terakhir Anda");
+        const response = await getBooksByIds(lastSearchIds);
+        setDisplayedBooks(response.data);
+      } catch (error) {
+        console.error("Gagal mengambil data riwayat:", error);
+        setPageTitle("Selamat Datang di Perpustakaan Digital");
+        setDisplayedBooks([]);
+      }
+    } else {
+      setPageTitle("Selamat Datang di Perpustakaan Digital");
+      setDisplayedBooks([]);
+    }
+    
     setIsLoading(false);
-  }, []);
-  
-  const handleSearch = (event) => {
+  }, [user]); // Dependensi pada user
+
+  useEffect(() => {
+    if (user) {
+        loadInitialData();
+    }
+  }, [user, loadInitialData]);
+
+  const handleSearch = async (event) => {
     event.preventDefault();
     if (!searchQuery.trim()) {
       setDialog({ isOpen: true, message: 'Harap masukkan kata kunci pencarian.', type: 'warning' });
       return;
     }
-    const result = searchAndRecommend(searchQuery, allBooks);
-    setDisplayedBooks(result.sortedBooks);
-    setSearchResult(result);
+    
+    setIsLoading(true);
+    setPageTitle(`Hasil Pencarian untuk "${searchQuery}"`);
+    try {
+      const response = await searchBooks(searchQuery);
+      setDisplayedBooks(response.data);
+      
+      const top6Ids = response.data.slice(0, 6).map(book => book.idBuku);
+      if (user) {
+        localStorage.setItem(`last_search_${user.username}`, JSON.stringify(top6Ids));
+      }
+      
+      setSearchResult({ query: searchQuery, sortedBooks: response.data });
+    } catch (error) {
+      console.error("Gagal melakukan pencarian:", error);
+      setDialog({ isOpen: true, message: 'Terjadi kesalahan saat mencari buku.', type: 'error' });
+      setDisplayedBooks([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+    // FUNGSI BARU: Untuk mereset pencarian
+  const handleResetSearch = () => {
+    setSearchQuery('');
+    setSearchResult(null);
+    loadInitialData(); // Panggil kembali logika data awal
   };
 
   const handleDownloadReport = () => {
     if (searchResult && searchResult.sortedBooks.length > 0) {
       generatePdfReport(searchResult);
     } else {
-      setDialog({ isOpen: true, message: 'Lakukan pencarian yang menghasilkan data sebelum membuat laporan.', type: 'info' });
+      setDialog({ 
+        isOpen: true, 
+        message: 'Lakukan pencarian yang menghasilkan data sebelum membuat laporan.', 
+        type: 'info' 
+      });
     }
   };
 
@@ -70,7 +119,6 @@ const HomePage = () => {
         />
       )}
 
-      {/* Header sudah ada di komponen Layout */}
       <main>
         <section className="search-section">
           <h2>Pencarian Buku</h2>
@@ -86,9 +134,12 @@ const HomePage = () => {
             <button type="submit" className="search-button">
               Cari
             </button>
+            {/* TOMBOL BARU: Reset Pencarian */}
+            <button type="button" onClick={handleResetSearch} className="reset-button" title="Reset Pencarian">
+                <FaSyncAlt />
+            </button>
           </form>
           
-          {/* PERUBAHAN: Tombol download hanya muncul jika ada hasil DAN peran adalah ADMIN */}
           {searchResult && user?.role === 'ROLE_ADMIN' && (
             <button onClick={handleDownloadReport} className="download-report-button">
               <FaFilePdf />
@@ -98,16 +149,19 @@ const HomePage = () => {
         </section>
 
         <section className="results-section">
+          <h2 className="results-title">{pageTitle}</h2>
           {isLoading ? (
             <div className="loading-spinner"></div>
           ) : (
             <div className="books-grid-horizontal">
               {displayedBooks.length > 0 ? (
                 displayedBooks.map((book) => (
-                  <BookCard key={book.id_buku} book={book} onReadMore={handleReadMore} />
+                  <BookCard key={book.idBuku} book={book} onReadMore={handleReadMore} />
                 ))
               ) : (
-                <p>Tidak ada buku yang ditemukan untuk kata kunci ini.</p>
+                <p className="no-books-message">
+                  Tidak ada buku untuk ditampilkan. Coba lakukan pencarian baru di atas.
+                </p>
               )}
             </div>
           )}

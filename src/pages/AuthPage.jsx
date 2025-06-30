@@ -3,12 +3,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DialogBox from '../components/DialogBox';
-import LoadingModal from '../components/LoadingModal'; // Impor modal loading
+import LoadingModal from '../components/LoadingModal';
+import ForgotPasswordModal from '../components/ForgotPasswordModal';
 import { useAuth } from '../hooks/useAuth';
 import { registerUser, loginUser } from '../services/apiService';
 import './AuthPage.css';
 
 const AuthPage = () => {
+  const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
   const [isRightPanelActive, setIsRightPanelActive] = useState(false);
   
   // State untuk form
@@ -75,6 +77,8 @@ const AuthPage = () => {
       {isLoading && <LoadingModal />} {/* Render modal loading jika isLoading true */}
       {dialog.isOpen && <DialogBox message={dialog.message} type={dialog.type} onClose={closeDialog} />}
 
+      {isForgotModalOpen && <ForgotPasswordModal onClose={() => setIsForgotModalOpen(false)} />}
+
       <div className={`auth-container ${isRightPanelActive ? "right-panel-active" : ""}`} id="container">
         
         {/* Form Pendaftaran */}
@@ -97,7 +101,9 @@ const AuthPage = () => {
             <h1>Login Akun</h1>
             <input type="email" placeholder="Email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} />
             <input type="password" placeholder="Password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
-            <a href="#">Lupa password?</a>
+                  <a href="#" onClick={(e) => { e.preventDefault(); setIsForgotModalOpen(true); }}>
+                    Lupa password?
+                  </a>
             <button type="submit">Login</button>
             <p className="mobile-toggle-text">
               Belum punya akun? <span onClick={() => setIsRightPanelActive(true)}>Daftar</span>
