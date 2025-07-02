@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { FaChevronDown, FaCheck } from 'react-icons/fa';
-import './CustomDropdown.css';
+import './CustomDropDown.css';
 
 const DropdownMenu = ({ options, onSelect, selectedValue, position, dropdownRef }) => {
   return (
