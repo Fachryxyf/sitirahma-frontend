@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import emailjs from '@emailjs/browser';
 import DialogBox from '../components/DialogBox';
 import LoadingModal from '../components/LoadingModal';
-import CustomDropdown from '../components/CustomDropdown';
+import CustomDropdown from '../components/CustomDropDown';
 import { useAuth } from '../hooks/useAuth';
 import './KuesionerPage.css';
 
