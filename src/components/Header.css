@@ -41,7 +41,9 @@
 }
 
 .logo-icon {
-  font-size: 1.8rem;
+  width: 50px !important;
+  height: 50px !important;
+  object-fit: contain !important;
   margin-right: 5px;
 }
 

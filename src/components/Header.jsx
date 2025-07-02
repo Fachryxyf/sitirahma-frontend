@@ -51,11 +51,16 @@ const Header = () => {
         <div className="header-container">
           <Link to="/" className="logo-link">
             <div className="logo-container">
-              <FaBookReader className="logo-icon" />
+              <img
+                src="https://smpn257jkt.sch.id/wp-content/uploads/2025/05/LOGO-257-NEW-BIG.png"
+                alt="Logo SMPN 257"
+                className="logo-icon"
+                style={{ width: '32px', height: '32px', objectFit: 'contain' }}
+              />
               <span className="logo-text">Perpustakaan Digital</span>
             </div>
           </Link>
-          
+
           <div className="nav-wrapper">
             <nav className="main-nav-desktop">
               <NavLink to="/" end className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>Pencarian</NavLink>
