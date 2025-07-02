@@ -1,0 +1,86 @@
+/* src/components/CustomDropdown.css */
+
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+}
+.dropdown-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+.dropdown-trigger:hover, .dropdown-trigger.active {
+  border-color: #34495e;
+  box-shadow: 0 0 0 3px rgba(52, 73, 94, 0.15);
+}
+.dropdown-value {
+  color: #2c3e50;
+}
+.dropdown-arrow {
+  transition: transform 0.3s ease;
+  color: #718096;
+}
+.dropdown-arrow.rotated {
+  transform: rotate(180deg);
+}
+.dropdown-menu-portal {
+  position: absolute;
+  z-index: 1100;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  animation: dropdown-fade-in 0.2s ease-out;
+}
+.dropdown-menu-portal.drop-up {
+    transform-origin: bottom center;
+}
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #f1f5f9;
+}
+.dropdown-option:last-child {
+  border-bottom: none;
+}
+.dropdown-option:hover {
+  background-color: #f8f9fa;
+}
+.dropdown-option.selected {
+  background-color: #34495e;
+}
+.option-text {
+    display: flex;
+    flex-direction: column;
+}
+.option-label {
+  font-weight: 500;
+  color: #2c3e50;
+}
+.dropdown-option.selected .option-label {
+  color: white;
+}
+.option-description {
+  font-size: 0.85rem;
+  color: #718096;
+}
+.dropdown-option.selected .option-description {
+  color: rgba(255, 255, 255, 0.8);
+}
+.option-check-icon {
+    color: white;
+    font-size: 1rem;
+}

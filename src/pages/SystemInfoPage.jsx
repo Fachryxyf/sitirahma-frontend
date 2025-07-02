@@ -1,36 +1,26 @@
-// src/pages/SystemInfoPage.jsx
-
 import React from 'react';
 import { FaCogs, FaSitemap, FaCode, FaRocket } from 'react-icons/fa';
-import Tooltip from '../components/Tooltip'; // Impor komponen Tooltip
+import Tooltip from '../components/Tooltip';
 import './ContentPage.css';
 
-// Data penjelasan untuk setiap istilah
 const termDescriptions = {
-  'Client-Server': 'Model arsitektur di mana satu program (client) meminta layanan dari program lain (server). Di sini, browser Anda adalah client.',
-  'API': 'Jembatan yang memungkinkan aplikasi frontend dan backend berkomunikasi dan bertukar data.',
-  'React.js': 'Library JavaScript untuk membangun antarmuka pengguna (UI) yang interaktif.',
-  'Spring Boot': 'Framework Java untuk membangun backend dan REST API yang tangguh.',
-  'PostgreSQL': 'Sistem manajemen basis data relasional open-source yang canggih.',
-  'Content-Based Filtering': 'Metode rekomendasi yang menyarankan item berdasarkan kemiripan konten dari item itu sendiri.',
-  'Weighted Keyword Scoring': 'Pendekatan penilaian di mana skor dihitung berdasarkan bobot berbeda tergantung lokasi kata kunci.',
-  'TF-IDF': 'Teknik statistik untuk mengukur seberapa penting sebuah kata dalam sebuah dokumen.',
-  'Tokenisasi': 'Proses memecah kalimat menjadi unit-unit kata (token).',
-  'Case Folding': 'Proses mengubah semua huruf menjadi huruf kecil.',
-  'Stop Word Removal': 'Proses menghapus kata-kata umum (seperti "di", "dan", "yang").',
-  'Create React App': 'Tool standar untuk membuat proyek React dengan konfigurasi awal yang solid.',
-  'Railway (Backend Hosting)': 'Platform cloud untuk hosting dan deployment otomatis aplikasi backend.',
-  'Vercel (Frontend Hosting)': 'Platform cloud yang dioptimalkan untuk hosting aplikasi frontend modern.',
-  'Neon (Database Hosting)': 'Platform database serverless untuk PostgreSQL.'
+    'Client-Server': 'Model arsitektur di mana client (browser Anda) meminta layanan dari server (aplikasi kami).',
+    'API': 'Jembatan komunikasi yang memungkinkan frontend dan backend bertukar data secara terstruktur.',
+    'React.js': 'Library JavaScript untuk membangun antarmuka pengguna (UI) yang interaktif dan modern.',
+    'Spring Boot': 'Framework Java untuk membangun backend dan REST API yang tangguh.',
+    'PostgreSQL': 'Sistem manajemen basis data relasional open-source yang canggih.',
+    'Content-Based Filtering': 'Metode sistem rekomendasi yang menyarankan item berdasarkan kemiripan fitur atau konten dari item itu sendiri.',
+    'Weighted Keyword Scoring': 'Pendekatan penilaian di mana skor dihitung berdasarkan bobot berbeda tergantung lokasi kata kunci.',
+    'Preprocessing': 'Proses pembersihan teks (seperti menghapus tanda baca dan kata umum) agar siap dianalisis oleh algoritma.'
 };
 
-// Komponen kecil untuk membuat pil istilah dengan tooltip
+// PERBAIKAN: Komponen ini sekarang me-render <li> yang membungkus <div>
 const TermPill = ({ term }) => (
-  <li>
-    <Tooltip content={termDescriptions[term] || 'Deskripsi tidak tersedia.'}>
-      <div className="term-pill">{term}</div>
-    </Tooltip>
-  </li>
+    <li>
+        <Tooltip content={termDescriptions[term] || 'Deskripsi tidak tersedia.'}>
+            <div className="term-pill">{term}</div>
+        </Tooltip>
+    </li>
 );
 
 const SystemInfoPage = () => {
@@ -43,8 +33,8 @@ const SystemInfoPage = () => {
           <FaSitemap className="card-header-icon" />
           <h2>Arsitektur Sistem</h2>
         </div>
-        <p>
-          Sistem ini dirancang menggunakan arsitektur <strong>client-server</strong> berbasis web. Komunikasi antara frontend dan backend dilakukan melalui protokol <strong>API</strong>, memastikan pemisahan tanggung jawab yang jelas antara tampilan dan logika.
+        <p className="card-description">
+          Sistem ini dirancang menggunakan arsitektur <strong>Client-Server</strong>. Frontend berkomunikasi dengan Backend melalui <strong>API</strong> untuk bertukar data.
         </p>
         <hr className="card-divider" />
         <div className="terms-list-container">
@@ -64,8 +54,8 @@ const SystemInfoPage = () => {
           <FaCogs className="card-header-icon" />
           <h2>Alur Kerja Algoritma</h2>
         </div>
-        <p>
-          Metode inti yang digunakan adalah <strong>Content-Based Filtering</strong>. Sistem memberikan skor relevansi berdasarkan skema pembobotan pada lokasi kecocokan kata kunci (Judul, Penulis, Keywords, dll.) dan kebaruan buku, sebuah pendekatan hibrida yang terinspirasi dari konsep <strong>TF-IDF</strong>.
+        <p className="card-description">
+          Metode inti yang digunakan adalah <strong>Content-Based Filtering</strong> dengan pendekatan <strong>Weighted Keyword Scoring</strong>. Sebelum membandingkan, semua teks akan melalui proses <strong>Preprocessing</strong> untuk membersihkan data.
         </p>
         <hr className="card-divider" />
         <div className="terms-list-container">
@@ -73,11 +63,10 @@ const SystemInfoPage = () => {
           <ul className="terms-list">
             <TermPill term="Content-Based Filtering" />
             <TermPill term="Weighted Keyword Scoring" />
-            <TermPill term="TF-IDF" />
+            <TermPill term="Preprocessing" />
           </ul>
         </div>
       </div>
-
     </div>
   );
 };

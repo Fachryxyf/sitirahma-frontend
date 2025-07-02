@@ -1,4 +1,5 @@
 // src/components/BookDetailModal.jsx
+
 import React from 'react';
 import './BookDetailModal.css';
 
@@ -16,6 +17,8 @@ const BookDetailModal = ({ book, onClose }) => {
             <p className="detail-modal-author">oleh {book.penulis}</p>
             <hr className="detail-modal-divider" />
             <div className="detail-modal-meta">
+              {/* PERUBAHAN: ID Buku dipindahkan ke atas */}
+              <span><strong>ID Buku:</strong> {book.idBuku}</span>
               <span><strong>Penerbit:</strong> {book.penerbit}</span>
               <span><strong>Tahun Terbit:</strong> {book.tahunTerbit}</span>
               <span><strong>Jumlah Halaman:</strong> {book.jumlahHalaman}</span>
@@ -26,7 +29,9 @@ const BookDetailModal = ({ book, onClose }) => {
           <h3>Sinopsis</h3>
           <p>{book.sinopsis}</p>
         </div>
-        <button onClick={onClose} className="detail-modal-close-btn">Tutup</button>
+        <div className="detail-modal-footer">
+          <button onClick={onClose} className="detail-modal-close-btn">Tutup</button>
+        </div>
       </div>
     </div>
   );

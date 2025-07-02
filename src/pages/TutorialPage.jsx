@@ -1,7 +1,7 @@
 // src/pages/TutorialPage.jsx
 
 import React from 'react';
-import { FaSignInAlt, FaSearch, FaFilePdf } from 'react-icons/fa';
+import { FaSignInAlt, FaSearch, FaFilePdf, FaUsersCog, FaQuestionCircle } from 'react-icons/fa';
 import './ContentPage.css';
 
 const TutorialPage = () => {
@@ -14,7 +14,7 @@ const TutorialPage = () => {
           <FaSignInAlt className="card-header-icon" />
           <h2>Langkah 1: Login & Navigasi</h2>
         </div>
-        <p>Gunakan username <strong>admin</strong> dan password <strong>password123</strong> untuk masuk. Setelah login, Anda dapat menggunakan menu navigasi di bagian atas untuk berpindah antar halaman. Untuk keluar, gunakan tombol "Logout".</p>
+        <p>Gunakan username/email dan password untuk masuk. Setelah login, Anda dapat menggunakan menu navigasi di bagian atas untuk berpindah antar halaman. Untuk keluar, klik ikon profil di pojok kanan atas lalu pilih "Logout".</p>
       </div>
 
       <div className="content-card" style={{ animationDelay: '0.2s' }}>
@@ -22,15 +22,31 @@ const TutorialPage = () => {
           <FaSearch className="card-header-icon" />
           <h2>Langkah 2: Pencarian & Hasil</h2>
         </div>
-        <p>Pada halaman "Pencarian", masukkan kata kunci atau topik yang relevan (contoh: <code>sejarah kerajaan</code>) lalu klik "Cari". Hasil akan ditampilkan dalam bentuk kartu buku, diurutkan berdasarkan skor relevansi tertinggi. Klik "Baca Selengkapnya" untuk melihat detail buku.</p>
+        <p>Pada halaman "Pencarian", masukkan kata kunci atau topik yang relevan. Hasil akan diurutkan berdasarkan relevansi. Klik "Baca Selengkapnya" untuk melihat detail buku.</p>
       </div>
 
       <div className="content-card" style={{ animationDelay: '0.3s' }}>
         <div className="card-header">
-          <FaFilePdf className="card-header-icon" />
-          <h2>Langkah 3: Laporan Analisis</h2>
+          <FaUsersCog className="card-header-icon" />
+          <h2>Fitur Khusus Admin</h2>
         </div>
-        <p>Setelah melakukan pencarian, sebuah tombol untuk mengunduh laporan PDF akan muncul. Laporan ini berisi ringkasan hasil pencarian dan analisis bobot kata kunci, sangat berguna untuk dokumentasi penelitian Anda.</p>
+        <p>Jika Anda login sebagai Admin, Anda akan melihat menu "Data Buku" dan "Data Pengguna". Di halaman tersebut, Anda dapat menambah, mengedit, menghapus, serta mengunduh template dan mengunggah data buku secara massal via file Excel.</p>
+      </div>
+      
+      <div className="content-card" style={{ animationDelay: '0.4s' }}>
+        <div className="card-header">
+          <FaFilePdf className="card-header-icon" />
+          <h2>Fitur Laporan Analisis (Admin)</h2>
+        </div>
+        <p>Setelah melakukan pencarian, Admin akan melihat tombol untuk mengunduh laporan PDF. Laporan ini berisi analisis detail hasil pencarian, termasuk skor dan kata kunci yang cocok, yang sangat berguna untuk dokumentasi.</p>
+      </div>
+
+      <div className="content-card" style={{ animationDelay: '0.5s' }}>
+        <div className="card-header">
+          <FaQuestionCircle className="card-header-icon" />
+          <h2>Fitur Kuesioner (User)</h2>
+        </div>
+        <p>Jika Anda login sebagai User, akan muncul menu "Kuesioner". Kami sangat menghargai jika Anda bersedia mengisinya untuk membantu pengembangan sistem ini di masa depan.</p>
       </div>
     </div>
   );

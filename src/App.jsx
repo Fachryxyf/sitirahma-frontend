@@ -14,6 +14,9 @@ import AboutPage from './pages/AboutPage.jsx';
 import SystemInfoPage from './pages/SystemInfoPage.jsx';
 import TutorialPage from './pages/TutorialPage.jsx';
 import CreditsPage from './pages/CreditsPage.jsx';
+import AdminManageBooks from './pages/AdminManageBooks.jsx';
+import AdminManageUsers from './pages/AdminManageUsers.jsx';
+import KuesionerPage from './pages/KuesionerPage.jsx';
 
 // Komponen Penjaga yang lebih sederhana
 const ProtectedRoute = ({ children }) => {
@@ -28,19 +31,22 @@ function App() {
   return (
     <Routes>
       <Route path="/auth" element={<AuthPage />} />
-      <Route 
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Layout />
-          </ProtectedRoute>
-        }
-      >
+    <Route 
+      path="/"
+      element={
+        <ProtectedRoute>
+          <Layout />
+        </ProtectedRoute>
+      }
+    >
         <Route index element={<HomePage />} />
         <Route path="tentang" element={<AboutPage />} />
         <Route path="info-sistem" element={<SystemInfoPage />} />
         <Route path="tutorial" element={<TutorialPage />} />
         <Route path="credits" element={<CreditsPage />} />
+        <Route path="kuesioner" element={<KuesionerPage />} />
+        <Route path="admin/manage-books" element={<AdminManageBooks />} />
+        <Route path="admin/manage-users" element={<AdminManageUsers />} />
       </Route>
     </Routes>
   );

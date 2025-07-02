@@ -1,0 +1,267 @@
+/* src/components/UserFormModal.css */
+
+/* Animasi untuk modal */
+@keyframes user-form-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes dropdown-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Kontainer utama modal */
+.user-form-modal {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 800px;
+  animation: user-form-fade-in 0.3s;
+  max-height: 85vh;
+  overflow-y: auto;
+  margin: auto; 
+}
+
+.user-form-modal h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 24px;
+  color: #2c3e50;
+}
+
+/* Form grid styling */
+.user-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Grup untuk label dan input */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.form-group.form-full-width {
+  width: 100%;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+/* Style umum untuk input */
+.user-form-modal input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.user-form-modal input:focus {
+  outline: none;
+  border-color: #34495e;
+  box-shadow: 0 0 0 3px rgba(52, 73, 94, 0.15);
+}
+
+/* ===== CUSTOM DROPDOWN STYLES ===== */
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+.dropdown-trigger:hover {
+  border-color: #34495e;
+}
+
+.dropdown-trigger.active {
+  border-color: #34495e;
+  box-shadow: 0 0 0 3px rgba(52, 73, 94, 0.15);
+}
+
+.dropdown-value {
+  color: #2c3e50;
+}
+
+.dropdown-arrow {
+  transition: transform 0.2s ease;
+  color: #4a5568;
+}
+
+.dropdown-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Modal */
+.dropdown-modal {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 1500; /* Tingkatkan z-index agar lebih tinggi dari modal overlay */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #d1d5db;
+  overflow: hidden;
+  animation: dropdown-fade-in 0.2s ease-out;
+}
+
+/* Dropdown yang muncul ke atas */
+.dropdown-modal.drop-up {
+  top: auto;
+  bottom: calc(100% + 4px);
+}
+
+.dropdown-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.dropdown-option:last-child {
+  border-bottom: none;
+}
+
+.dropdown-option:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-option.selected {
+  background-color: #34495e;
+  color: white;
+}
+
+.dropdown-option .option-label {
+  font-weight: 500;
+  color: inherit;
+  margin-bottom: 2px;
+}
+
+.dropdown-option .option-description {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.dropdown-option.selected .option-description {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Kontainer untuk tombol aksi */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.form-actions.form-full-width {
+  width: 100%;
+}
+
+.form-actions button {
+  display: flex;
+  align-items: center;
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+/* Tombol Batal */
+.cancel-btn {
+  background-color: #f1f5f9;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+.cancel-btn:hover {
+  background-color: #e2e8f0;
+}
+
+/* Tombol Simpan */
+.submit-btn {
+  background-color: #34495e;
+  color: white;
+}
+
+.submit-btn:hover {
+  background-color: #2c3e50;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .user-form-modal {
+    width: 95%;
+    padding: 20px 25px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+}

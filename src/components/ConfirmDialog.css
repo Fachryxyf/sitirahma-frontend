@@ -1,0 +1,64 @@
+/* src/components/ConfirmDialog.css */
+
+.confirm-dialog-content {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  animation: fadeIn 0.3s;
+}
+
+.confirm-dialog-icon {
+  font-size: 3rem;
+  color: #e74c3c; /* Merah untuk peringatan */
+  margin-bottom: 16px;
+}
+
+.confirm-dialog-title {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+
+.confirm-dialog-message {
+  margin: 0 0 24px 0;
+  color: #718096;
+  line-height: 1.6;
+}
+
+.confirm-dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.confirm-dialog-actions button {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.confirm-dialog-actions .cancel-btn {
+  background-color: #f1f5f9;
+  color: #4a5568;
+}
+
+.confirm-dialog-actions .cancel-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.confirm-dialog-actions .confirm-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.confirm-dialog-actions .confirm-btn:hover {
+  background-color: #c0392b;
+}

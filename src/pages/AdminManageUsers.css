@@ -1,0 +1,82 @@
+/* src/pages/AdminManageUsers.css */
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.books-management-table { /* Nama kelas ini bisa kita anggap sebagai 'management-table' umum */
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+}
+
+.books-management-table th,
+.books-management-table td {
+  border: 1px solid #eef2f7;
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.books-management-table thead {
+  background-color: #f8f9fa;
+}
+
+.books-management-table th {
+  font-weight: 600;
+  color: #34495e;
+}
+
+.books-management-table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.action-buttons button {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  font-weight: 500;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.action-buttons button:hover {
+  opacity: 0.8;
+}
+
+.edit-btn {
+  background-color: #3498db; /* Biru */
+}
+
+.delete-btn {
+  background-color: #e74c3c; /* Merah */
+}
+
+.add-book-btn { /* Style ini juga digunakan oleh tombol "Tambah Pengguna" */
+  margin-left: auto;
+  padding: 10px 20px;
+  border: none;
+  background-color: #27ae60; /* Hijau */
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.add-book-btn:hover {
+  background-color: #229954;
+}

@@ -5,11 +5,10 @@ import { useAuth } from '../hooks/useAuth.js';
 import './BookCard.css';
 
 const BookCard = ({ book, onReadMore }) => {
-  const { user } = useAuth(); // Dapatkan informasi pengguna
+  const { user } = useAuth();
 
   return (
     <div className="book-card-horizontal">
-      {/* PERUBAHAN: Tampilkan skor HANYA jika pengguna adalah ADMIN dan skor ada */}
       {user?.role === 'ROLE_ADMIN' && book.score > 0 && (
         <div className="book-card-score">
           Skor: {book.score.toFixed(3)}
@@ -28,6 +27,10 @@ const BookCard = ({ book, onReadMore }) => {
 
         <h3 className="book-card-title">{book.judul}</h3>
         <p className="book-card-author">oleh {book.penulis}</p>
+        
+        {/* PENAMBAHAN: Menampilkan ID Buku */}
+        <p className="book-card-id">ID: {book.idBuku}</p>
+        
         <p className="book-card-synopsis">
           {book.sinopsis.substring(0, 100)}...
         </p>

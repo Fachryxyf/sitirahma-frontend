@@ -1,10 +1,15 @@
 /* src/components/Header.css */
 
+/* src/components/Header.css */
 .app-header {
   background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  
+  /* PERBAIKAN: Menghapus border-bottom dan menggantinya dengan shadow halus */
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.05); */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
   padding: 0 40px;
   position: sticky;
   top: 0;
@@ -16,12 +21,18 @@
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  align-items: center;
-  /* PERUBAHAN UTAMA: Memastikan logo di kiri, sisa di kanan */
-  justify-content: space-between; 
+  /* PERBAIKAN: Memastikan semua item rata tengah secara vertikal */
+  align-items: center; 
+  justify-content: space-between;
   height: 100%;
 }
 
+.logo-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+}
 .logo-container {
   display: flex;
   align-items: center;
@@ -31,33 +42,34 @@
 
 .logo-icon {
   font-size: 1.8rem;
+  margin-right: 5px;
 }
 
 .logo-text {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 700;
 }
 
-/* Wrapper untuk navigasi dan tombol logout di kanan */
 .nav-wrapper {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 24px; /* Sedikit mengurangi gap untuk lebih banyak ruang */
 }
 
 .main-nav-desktop {
   display: flex;
-  gap: 10px;
+  gap: 8px; /* Mengurangi gap antar link navigasi */
 }
 
 .nav-link {
   text-decoration: none;
   color: #4a5568;
   font-weight: 500;
-  padding: 8px 16px;
+  padding: 8px 12px; /* Padding sedikit disesuaikan */
   border-radius: 8px;
   position: relative;
   transition: all 0.3s ease;
+  white-space: nowrap; /* Mencegah teks turun baris */
 }
 
 .nav-link:hover {
@@ -274,3 +286,31 @@
   cursor: pointer;
 }
 
+.admin-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f0f4f8;
+  color: #34495e;
+}
+
+/* PERBAIKAN: Warna aktif untuk link admin dibuat lebih elegan */
+.admin-link.active {
+  background-color: #2c3e50;
+  color: white;
+}
+
+.mobile-nav-links .admin-link {
+    flex-direction: row;
+    justify-content: center;
+    background-color: transparent;
+    font-size: 1.5rem;
+    color: #4a5568;
+}
+
+.mobile-nav-links .admin-link.active {
+    background-color: transparent;
+    color: #2c3e50;
+    font-weight: 700;
+    border-bottom: none;
+}
