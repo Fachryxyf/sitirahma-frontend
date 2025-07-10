@@ -1,31 +1,74 @@
-/* src/components/BookFormModal.css */
+/* src/components/BookFormModal.css - Final Version */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Overlay sekarang kembali menengahkan modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center; /* Kembali ke center */
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px; /* Jarak dari tepi layar */
+}
+
+/* Konten modal sekarang diatur tinggi dan scroll-nya */
 .book-form-modal {
   background: white;
-  padding: 30px 40px;
   border-radius: 16px;
   width: 90%;
   max-width: 800px;
+  
+  /* PERBAIKAN UTAMA */
+  max-height: 90vh; /* Tinggi maksimal adalah 90% dari tinggi layar */
+  display: flex;
+  flex-direction: column; /* Layout vertikal untuk header, content, footer */
   animation: fadeIn 0.3s;
 }
 
 .book-form-modal h2 {
-  margin-top: 0;
-  margin-bottom: 24px;
+  padding: 24px 40px 20px 40px;
+  margin: 0;
   text-align: center;
   color: #2c3e50;
+  flex-shrink: 0; /* Mencegah header menyusut */
+  border-bottom: 1px solid #eef2f7;
 }
 
+/* Form grid sekarang menjadi area yang bisa di-scroll */
 .book-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px; /* Perbesar jarak antar group */
+  gap: 24px;
+  padding: 24px 40px;
+  overflow-y: auto; /* Scroll hanya pada area ini */
 }
 
-/* KODE BARU */
+/* Style untuk scrollbar (opsional, tapi premium) */
+.book-form-grid::-webkit-scrollbar {
+  width: 8px;
+}
+.book-form-grid::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 4px;
+}
+.book-form-grid::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
-  text-align: left;
 }
 
 .form-group label {
@@ -43,7 +86,6 @@
   border-radius: 8px;
   font-size: 1rem;
   font-family: 'Poppins', sans-serif;
-  /* Hapus margin karena diatur oleh gap parent */
 }
 
 .form-full-width {
@@ -51,15 +93,18 @@
 }
 
 textarea {
-  min-height: 100px;
+  min-height: 120px;
   resize: vertical;
 }
 
+/* Tombol aksi sekarang menjadi footer modal */
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 16px;
+  padding: 20px 40px;
+  border-top: 1px solid #eef2f7;
+  flex-shrink: 0; /* Mencegah footer menyusut */
 }
 
 .form-actions button {
@@ -88,13 +133,10 @@ textarea {
   background-color: #2c3e50;
 }
 
-.user-form-modal select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2334495e%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.6-3.6%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22/%3E%3C/svg%3E');
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 0.65em auto;
-  cursor: pointer;
+/* Style untuk status upload (dari kode Anda) */
+.upload-status {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #34495e;
+    font-weight: 500;
 }

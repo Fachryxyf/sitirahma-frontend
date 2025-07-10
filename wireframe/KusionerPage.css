@@ -1,0 +1,22 @@
+.kuesioner-wrapper { max-width: 800px; margin: 2rem auto; padding: 1rem; }
+.kuesioner-wrapper h1 { text-align: center; color: #2c3e50; }
+.kuesioner-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.kuesioner-form { margin-top: 1.5rem; }
+.kuesioner-group { margin-bottom: 1.5rem; }
+.kuesioner-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+.kuesioner-group select, .kuesioner-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.kuesioner-submit-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}

@@ -1,7 +1,7 @@
 // src/pages/HomePage.jsx
 
-import React, { useState, useEffect, useCallback } from 'react'; // Impor useCallback
-import { FaFilePdf, FaSyncAlt } from 'react-icons/fa'; // Impor ikon reset
+import React, { useState, useEffect, useCallback } from 'react';
+import { FaFilePdf, FaSyncAlt } from 'react-icons/fa';
 import { searchBooks, getBooksByIds } from '../services/apiService.js';
 import { generatePdfReport } from '../services/pdfReportService.js';
 import BookCard from '../components/BookCard';
@@ -21,10 +21,9 @@ const HomePage = () => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [dialog, setDialog] = useState({ isOpen: false, message: '', type: 'info' });
 
-  // PERBAIKAN: Logika load data awal dipisahkan agar bisa dipanggil ulang
   const loadInitialData = useCallback(async () => {
     setIsLoading(true);
-    const lastSearchIds = JSON.parse(localStorage.getItem(`last_search_${user?.username}`));
+    const lastSearchIds = user ? JSON.parse(localStorage.getItem(`last_search_${user.username}`)) : null;
     
     if (lastSearchIds && lastSearchIds.length > 0) {
       try {
@@ -42,7 +41,7 @@ const HomePage = () => {
     }
     
     setIsLoading(false);
-  }, [user]); // Dependensi pada user
+  }, [user]);
 
   useEffect(() => {
     if (user) {
@@ -53,7 +52,8 @@ const HomePage = () => {
   const handleSearch = async (event) => {
     event.preventDefault();
     if (!searchQuery.trim()) {
-      setDialog({ isOpen: true, message: 'Harap masukkan kata kunci pencarian.', type: 'warning' });
+      loadInitialData();
+      setSearchResult(null);
       return;
     }
     
@@ -78,23 +78,10 @@ const HomePage = () => {
     }
   };
 
-    // FUNGSI BARU: Untuk mereset pencarian
   const handleResetSearch = () => {
     setSearchQuery('');
     setSearchResult(null);
-    loadInitialData(); // Panggil kembali logika data awal
-  };
-
-  const handleDownloadReport = () => {
-    if (searchResult && searchResult.sortedBooks.length > 0) {
-      generatePdfReport(searchResult);
-    } else {
-      setDialog({ 
-        isOpen: true, 
-        message: 'Lakukan pencarian yang menghasilkan data sebelum membuat laporan.', 
-        type: 'info' 
-      });
-    }
+    loadInitialData();
   };
 
   const handleReadMore = (book) => {
@@ -107,6 +94,14 @@ const HomePage = () => {
 
   const closeDialog = () => {
     setDialog({ isOpen: false, message: '', type: 'info' });
+  };
+
+  const handleDownloadReport = () => {
+    if (searchResult && searchResult.sortedBooks.length > 0) {
+      generatePdfReport(searchResult);
+    } else {
+      setDialog({ isOpen: true, message: 'Lakukan pencarian yang menghasilkan data sebelum membuat laporan.', type: 'info' });
+    }
   };
 
   return (
@@ -134,14 +129,16 @@ const HomePage = () => {
             <button type="submit" className="search-button">
               Cari
             </button>
-            {/* TOMBOL BARU: Reset Pencarian */}
             <button type="button" onClick={handleResetSearch} className="reset-button" title="Reset Pencarian">
                 <FaSyncAlt />
             </button>
           </form>
           
-          {searchResult && user?.role === 'ROLE_ADMIN' && (
-            <button onClick={handleDownloadReport} className="download-report-button">
+          {searchResult && searchResult.sortedBooks && searchResult.sortedBooks.length > 0 && user?.role === 'ROLE_ADMIN' && (
+            <button 
+              onClick={handleDownloadReport} 
+              className="download-report-button"
+            >
               <FaFilePdf />
               <span>Download Laporan Analisis</span>
             </button>
@@ -153,17 +150,24 @@ const HomePage = () => {
           {isLoading ? (
             <div className="loading-spinner"></div>
           ) : (
-            <div className="books-grid-horizontal">
-              {displayedBooks.length > 0 ? (
-                displayedBooks.map((book) => (
-                  <BookCard key={book.idBuku} book={book} onReadMore={handleReadMore} />
-                ))
-              ) : (
+            displayedBooks.length > 0 ? (
+              <div className="books-grid-horizontal">
+                {/* PERBAIKAN UTAMA DI SINI */}
+                {displayedBooks.map((book) => (
+                  <BookCard
+                    key={book.idBuku}      
+                    book={book} // Mengirim seluruh objek buku
+                    onReadMore={() => handleReadMore(book)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="no-books-container">
                 <p className="no-books-message">
                   Tidak ada buku untuk ditampilkan. Coba lakukan pencarian baru di atas.
                 </p>
-              )}
-            </div>
+              </div>
+            )
           )}
         </section>
       </main>

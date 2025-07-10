@@ -1,0 +1,14 @@
+/* Menggunakan CSS Umum yang sudah didefinisikan di awal */
+.tech-grid {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+.tech-grid li {
+    background-color: #ecf0f1;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}

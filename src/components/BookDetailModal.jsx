@@ -17,7 +17,7 @@ const BookDetailModal = ({ book, onClose }) => {
             <p className="detail-modal-author">oleh {book.penulis}</p>
             <hr className="detail-modal-divider" />
             <div className="detail-modal-meta">
-              {/* PERUBAHAN: ID Buku dipindahkan ke atas */}
+              {}
               <span><strong>ID Buku:</strong> {book.idBuku}</span>
               <span><strong>Penerbit:</strong> {book.penerbit}</span>
               <span><strong>Tahun Terbit:</strong> {book.tahunTerbit}</span>

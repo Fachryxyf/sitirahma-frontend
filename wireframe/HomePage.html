@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup About Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="HomePage.css">
+</head>
+<body>
+    <div class="homepage-container">
+        <main>
+            <section class="search-section">
+                <h2>Pencarian Buku</h2>
+                <p>Ketik topik, judul, atau kata kunci yang relevan.</p>
+                <form class="search-form">
+                    <input type="text" placeholder="Contoh: 'kerajaan nusantara' atau 'ekosistem laut'" class="search-input"/>
+                    <button type="submit" class="search-button">Cari</button>
+                    <button type="button" class="reset-button" title="Reset Pencarian">[R]</button>
+                </form>
+                <button class="download-report-button">[PDF] <span>Download Laporan Analisis</span></button>
+            </section>
+
+            <section class="results-section">
+                <h2 class="results-title">Berdasarkan Pencarian Terakhir Anda</h2>
+                <div class="books-grid-horizontal">
+                    <div class="book-card">
+                        <img src="https://via.placeholder.com/150x220" alt="Cover Buku">
+                        <div class="book-card-info">
+                            <h3>Sejarah Dunia Kuno</h3>
+                            <p class="author">Penulis Terkenal</p>
+                            <span class="score">Skor: 95.5</span>
+                            <button class="read-more-btn">Baca Selengkapnya</button>
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <img src="https://via.placeholder.com/150x220" alt="Cover Buku">
+                        <div class="book-card-info">
+                            <h3>Biologi Modern</h3>
+                            <p class="author">Ahli Biologi</p>
+                            <span class="score">Skor: 89.2</span>
+                            <button class="read-more-btn">Baca Selengkapnya</button>
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <img src="https://via.placeholder.com/150x220" alt="Cover Buku">
+                        <div class="book-card-info">
+                            <h3>Pengantar Fisika</h3>
+                            <p class="author">Ilmuwan Fisika</p>
+                            <span class="score">Skor: 85.0</span>
+                            <button class="read-more-btn">Baca Selengkapnya</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

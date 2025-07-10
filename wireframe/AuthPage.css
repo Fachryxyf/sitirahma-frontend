@@ -1,0 +1,101 @@
+/* Pengaturan dasar untuk body dan font */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f7f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+/* Kontainer utama yang akan menjadi grid */
+.auth-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dua kolom dengan lebar yang sama */
+    grid-template-rows: auto auto;   /* Dua baris, tinggi otomatis */
+    gap: 25px; /* Jarak antar komponen */
+    width: 100%;
+    max-width: 850px;
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling untuk setiap kartu di dalam grid */
+.auth-form-card,
+.overlay-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    border: 2px dashed #dbe4f0; /* Garis putus-putus untuk menandakan wireframe */
+    border-radius: 8px;
+}
+
+/* Memberi warna latar berbeda untuk panel overlay */
+.overlay-panel {
+    background-color: #f8f9fa;
+}
+
+/* Styling untuk elemen teks dan form */
+h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 1rem 0;
+}
+
+input {
+    background-color: #f0f3f7;
+    border: none;
+    padding: 12px 15px;
+    margin-top: 0.5rem;
+    width: 100%;
+    max-width: 280px; /* Batasi lebar input agar tidak terlalu besar */
+    border-radius: 8px;
+}
+
+a {
+    color: #3498db;
+    font-size: 0.85rem;
+    text-decoration: none;
+    margin-top: 1rem;
+}
+
+/* Styling untuk tombol */
+button {
+    border-radius: 20px;
+    border: 1px solid #3498db;
+    background-color: #3498db;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 1.5rem;
+}
+
+/* Tombol "ghost" dengan style transparan */
+button.ghost {
+    background-color: transparent;
+    border-color: #3498db;
+    color: #3498db;
+}
+
+/* Menghilangkan elemen overlay yang tidak diperlukan untuk wireframe statis */
+.overlay-container {
+    display: none;
+}

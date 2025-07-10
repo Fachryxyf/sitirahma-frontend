@@ -1,0 +1,10 @@
+/* Menggunakan CSS Umum yang sudah didefinisikan di awal */
+.terms-list-container { margin-top: 1rem; }
+.terms-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.term-pill {
+    background-color: #ecf0f1;
+    color: #34495e;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.9em;
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup About Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="AdminManageUsers.css">
+</head>
+<body>
+    <div class="content-page-wrapper">
+        <div class="content-card">
+            <div class="card-header">
+                <h2>Manajemen Data Pengguna</h2>
+                <div class="header-actions">
+                    <button class="add-book-btn">[+] Tambah Pengguna</button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="books-management-table"> <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nama Lengkap</th>
+                            <th>Email</th>
+                            <th>Peran (Role)</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Admin Utama</td>
+                            <td>admin@sekolah.id</td>
+                            <td>ROLE_ADMIN</td>
+                            <td class="action-buttons">
+                                <button class="edit-btn">Edit</button>
+                                <button class="delete-btn" disabled>Hapus</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Siswa Contoh</td>
+                            <td>siswa@email.com</td>
+                            <td>ROLE_USER</td>
+                            <td class="action-buttons">
+                                <button class="edit-btn">Edit</button>
+                                <button class="delete-btn">Hapus</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

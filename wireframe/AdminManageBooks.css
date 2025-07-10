@@ -1,0 +1,16 @@
+/* Menggunakan CSS Umum yang sudah didefinisikan di awal */
+.header-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 0.5rem;
+}
+.header-actions button {
+    padding: 8px 12px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.download-btn { background-color: #27ae60; }
+.upload-btn { background-color: #f39c12; }
+.add-book-btn { background-color: #3498db; }

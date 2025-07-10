@@ -1,137 +1,266 @@
-// src/services/pdfReportService.js
-
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import logoFromFile from '../assets/smp257.png';
 
 export const generatePdfReport = (searchResult) => {
-  if (!searchResult || !searchResult.sortedBooks || searchResult.sortedBooks.length === 0) {
-    alert("Tidak ada data untuk dibuat laporan.");
+  if (!searchResult || !searchResult.sortedBooks) {
+    alert("Data untuk laporan tidak valid.");
+    return;
+  }
+
+  const { query, sortedBooks: rawBooks } = searchResult;
+  
+  // PERBAIKAN UTAMA 1: Ubah filter untuk mencocokkan struktur data "datar"
+  const sortedBooks = rawBooks.filter(item => item && item.scoreDetails && item.reportTerms);
+
+  if (sortedBooks.length === 0) {
+    alert("Tidak ada data valid yang cukup untuk dibuat laporan analisis.");
     return;
   }
 
   const doc = new jsPDF();
-  const { query, sortedBooks } = searchResult;
   const totalPagesExp = '{total_pages_count_string}';
   const pageHeight = doc.internal.pageSize.getHeight();
   const pageWidth = doc.internal.pageSize.getWidth();
+  const safeText = (text, fallback = 'N/A') => text || fallback;
 
-  // --- Fungsi untuk Header & Footer ---
-  const pageHeader = (data) => {
-    // PERUBAHAN: Logo dihapus total
+  // ... (kode header, footer, dan lainnya tetap sama) ...
+  const schoolData = {
+    name: 'SMPN 257 JAKARTA TIMUR',
+    address: 'Jalan Kel. Rambutan No.50, RT.4/RW.3, Rambutan, Ciracas',
+    phone: 'Telp: (021) 8404160',
+    email: 'Email: smpn257jkt@gmail.com',
+    website: 'Website: https://smpn257jkt.sch.id/'
+  };
 
-    // PERBAIKAN: Posisi teks diubah menjadi rata tengah untuk tampilan kop surat
+const addHeader = () => {
+    doc.setFillColor(255, 255, 255);
+    doc.rect(0, 0, pageWidth, 45, 'F');
+
+    const logoBase64 = logoFromFile;
+    const logoWidth = 25;
+    const logoHeight = 25;
+    const logoX = 20;
+    const logoY = 8;
+
+    doc.addImage(logoBase64, 'WEBP', logoX, logoY, logoWidth, logoHeight);
+
     doc.setFont('Helvetica', 'bold');
-    doc.setFontSize(16);
-    doc.setTextColor(44, 62, 80); // #2c3e50
-    doc.text('Perpustakaan Digital SMPN 257 Jakarta Timur', pageWidth / 2, 20, { align: 'center' });
-    
+    doc.setFontSize(18);
+    doc.setTextColor(0, 0, 0);
+    doc.text(schoolData.name, pageWidth / 2, 15, { align: 'center' });
     doc.setFont('Helvetica', 'normal');
     doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text('Laporan Analisis Rekomendasi Buku', pageWidth / 2, 27, { align: 'center' });
-    
-    // Garis Pemisah
-    doc.setDrawColor(52, 73, 94); // #34495e
+    doc.text(schoolData.address, pageWidth / 2, 22, { align: 'center' });
+    doc.setFontSize(9);
+    doc.text(`${schoolData.phone} | ${schoolData.email}`, pageWidth / 2, 28, { align: 'center' });
+    doc.text(schoolData.website, pageWidth / 2, 33, { align: 'center' });
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(1);
+    doc.line(20, 38, pageWidth - 20, 38);
     doc.setLineWidth(0.5);
-    doc.line(data.settings.margin.left, 35, pageWidth - data.settings.margin.right, 35);
+    doc.line(20, 40, pageWidth - 20, 40);
+    return 45;
+};
+
+  const addFooter = (data) => {
+    const pageNumber = data.pageNumber;
+    const margin = 20;
+    const currentDate = new Date().toLocaleDateString('id-ID', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+    const currentTime = new Date().toLocaleTimeString('id-ID', {
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+    doc.setDrawColor(150, 150, 150);
+    doc.setLineWidth(0.3);
+    doc.line(margin, pageHeight - 25, pageWidth - margin, pageHeight - 25);
+    doc.setFontSize(9);
+    doc.setTextColor(100);
+    doc.text(`Dicetak pada: ${currentDate} pukul ${currentTime}`, margin, pageHeight - 20);
+    let pageStr = `Halaman ${pageNumber}`;
+    if (typeof doc.putTotalPages === 'function') {
+      pageStr += ` dari ${totalPagesExp}`;
+    }
+    doc.text(pageStr, pageWidth - margin, pageHeight - 20, { align: 'right' });
   };
   
-  const pageFooter = (data) => {
-    let str = "Halaman " + data.pageNumber;
-    if (typeof doc.putTotalPages === 'function') {
-      str = str + " dari " + totalPagesExp;
+  const checkAndAddPage = (currentY, requiredSpace) => {
+    if (currentY + requiredSpace > pageHeight - 40) {
+      doc.addPage();
+      return addHeader();
     }
-    doc.setFontSize(10);
-    doc.setTextColor(150);
-    doc.text(str, data.settings.margin.left, pageHeight - 10);
+    return currentY;
   };
 
-  // --- Tabel 1: Ringkasan Hasil Rekomendasi (TOP 10) ---
-  const summaryHead = [["Peringkat", "Judul Buku", "Penulis", "Skor Relevansi"]];
-  const summaryBody = sortedBooks.slice(0, 10).map((book, index) => [
-    index + 1,
-    book.judul,
-    book.penulis,
-    book.score.toFixed(2)
-  ]);
+  let currentY = addHeader();
+
+  doc.setFont('Helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.text('LAPORAN ANALISIS REKOMENDASI BUKU', pageWidth / 2, currentY + 10, { align: 'center' });
+  doc.text('PERPUSTAKAAN DIGITAL', pageWidth / 2, currentY + 17, { align: 'center' });
+  doc.setLineWidth(0.5);
+  doc.line(20, currentY + 20, pageWidth - 20, currentY + 20);
+  currentY += 30;
+  
+  doc.setFontSize(12);
+  doc.setTextColor(44, 62, 80);
+  doc.text(`Analisis Pencarian: "${query}"`, 20, currentY);
+  currentY += 15;
+  
+  const totalBooks = sortedBooks.length;
+  const avgScore = totalBooks > 0 ? sortedBooks.reduce((sum, item) => sum + item.score, 0) / totalBooks : 0;
+  const maxScore = totalBooks > 0 ? sortedBooks.reduce((max, item) => Math.max(max, item.score), 0) : 0;
+  const minScore = totalBooks > 0 ? sortedBooks.reduce((min, item) => Math.min(min, item.score), sortedBooks[0].score) : 0;
+  const searchStats = sortedBooks.reduce((acc, item) => { // Menggunakan item langsung
+    if (item.kategori) acc.categoriesFound.add(item.kategori);
+    if (item.reportTerms?.title) acc.titleMatches++;
+    if (item.reportTerms?.synopsis) acc.synopsisMatches++;
+    return acc;
+  }, { categoriesFound: new Set(), titleMatches: 0, synopsisMatches: 0 });
 
   autoTable(doc, {
-    head: summaryHead,
-    body: summaryBody,
+    head: [["Metrik", "Nilai", "Keterangan"]],
+    body: [
+        ["Total Buku Ditemukan", totalBooks.toString(), "Jumlah buku yang relevan"],
+        ["Skor Rata-rata", avgScore.toFixed(3), "Rata-rata tingkat kesesuaian"],
+        ["Skor Tertinggi", maxScore.toFixed(3), "Buku dengan kesesuaian tertinggi"],
+        ["Skor Terendah", minScore.toFixed(3), "Buku dengan kesesuaian terendah"],
+        ["Kategori Ditemukan", searchStats.categoriesFound.size.toString(), "Variasi kategori buku yang relevan"],
+    ],
+    startY: currentY,
     theme: 'grid',
-    styles: { font: 'Helvetica', cellPadding: 3, fontSize: 10 },
-    headStyles: {
-      fillColor: [52, 73, 94],
-      textColor: [255, 255, 255],
-      fontStyle: 'bold',
-      halign: 'center'
-    },
-    alternateRowStyles: { fillColor: [245, 245, 245] },
-    columnStyles: {
-      0: { halign: 'center', cellWidth: 20 },
-      1: { halign: 'left' },
-      2: { halign: 'left' },
-      3: { halign: 'center', cellWidth: 30 }
-    },
-    didDrawPage: (data) => {
-      pageHeader(data);
-      doc.setFontSize(12);
-      doc.setTextColor(44, 62, 80);
-      doc.text(`Hasil Pencarian untuk Kata Kunci: "${query}"`, data.settings.margin.left, 47);
-      pageFooter(data);
-    },
-    margin: { top: 55 }, // Margin disesuaikan dengan tinggi kop surat baru
+    didDrawPage: addFooter
+  });
+  currentY = doc.lastAutoTable.finalY + 10;
+  
+  autoTable(doc, {
+    head: [["Rank", "Judul Buku", "Penulis", "Kategori", "Skor"]],
+    // PERBAIKAN UTAMA 2: Akses properti langsung dari 'item'
+    body: sortedBooks.slice(0, 10).map((item, index) => [
+        index + 1,
+        safeText(item.judul, 'Tanpa Judul'),
+        safeText(item.penulis, 'Tanpa Penulis'),
+        safeText(item.kategori, 'Tanpa Kategori'),
+        item.score.toFixed(3)
+    ]),
+    startY: currentY,
+    theme: 'striped',
+    didDrawPage: addFooter
   });
 
-  // --- Tabel 2: Detail Laporan Bobot Kata Kunci per Buku ---
-  let currentY = doc.lastAutoTable.finalY;
+  currentY = doc.lastAutoTable.finalY + 25;
 
-  sortedBooks.slice(0, 5).forEach((book, index) => {
-    // Cek jika butuh halaman baru
-    if (currentY > pageHeight - 60) {
-      doc.addPage();
-      currentY = 0;
-    }
-    
-    const detailTitleY = currentY === 0 ? 45 : currentY + 15;
-    if (currentY === 0) { // Jika ini halaman baru
-        pageHeader({ settings: { margin: { left: 14, right: 14 } } });
-    }
+  currentY = checkAndAddPage(currentY, 100);
 
-    doc.setFontSize(12);
-    doc.setTextColor(44, 62, 80);
-    doc.text(`Detail Bobot #${index + 1}: ${book.judul}`, 14, detailTitleY);
-    
+  doc.setFont(undefined, 'bold');
+  doc.setFontSize(12).setTextColor(44, 62, 80).text('DETAIL ANALISIS SKOR (TOP 5)', 20, currentY);
+
+  doc.setFont(undefined, 'normal');
+
+  currentY += 10;
+
+  sortedBooks.slice(0, 5).forEach((item, index) => {
+    currentY = checkAndAddPage(currentY, 80);
+    // PERBAIKAN UTAMA 3: Destructuring langsung dari 'item'
+    const { reportTerms, scoreDetails } = item;
     const tableBody = [];
-    if (book.reportTerms) {
-        if(book.reportTerms.title.length > 0) tableBody.push([`Di Judul`, book.reportTerms.title.join(', '), '+3.0 per kata']);
-        if(book.reportTerms.author.length > 0) tableBody.push([`Di Penulis`, book.reportTerms.author.join(', '), '+2.5 per kata']);
-        if(book.reportTerms.keywords.length > 0) tableBody.push([`Di Keywords`, book.reportTerms.keywords.join(', '), '+2.0 per kata']);
-        if(book.reportTerms.synopsis.length > 0) tableBody.push([`Di Sinopsis`, book.reportTerms.synopsis.join(', '), '+1.0 per kemunculan']);
-    }
+    
+    const safeJoin = (terms) => (terms || []).join(', ') || 'N/A';
+
+    if (scoreDetails.title) tableBody.push(['Judul Buku', safeJoin(reportTerms.title), 'Bobot Manual', scoreDetails.title.toFixed(3)]);
+    if (scoreDetails.author) tableBody.push(['Nama Penulis', safeJoin(reportTerms.author), 'Bobot Manual', scoreDetails.author.toFixed(3)]);
+    if (scoreDetails.publisher) tableBody.push(['Penerbit', safeJoin(reportTerms.publisher), 'Bobot Manual', scoreDetails.publisher.toFixed(3)]);
+    if (scoreDetails.synopsis) tableBody.push(['Sinopsis', safeJoin(reportTerms.synopsis), 'Skor TF-IDF', scoreDetails.synopsis.toFixed(3)]);
+    if (scoreDetails.keywords) tableBody.push(['Keywords', safeJoin(reportTerms.keywords), 'Skor TF-IDF', scoreDetails.keywords.toFixed(3)]);
+    if (scoreDetails.yearBonus) tableBody.push(['Bonus Tahun Terbit', `Tahun ${safeText(item.tahunTerbit)}`, 'Bonus Skor', scoreDetails.yearBonus.toFixed(3)]);
     
     autoTable(doc, {
-        startY: detailTitleY + 5,
-        head: [[{ content: `Analisis Kecocokan Kata Kunci (Skor Total: ${book.score.toFixed(2)})`, colSpan: 3, styles: { halign: 'center', fillColor: [44, 62, 80] } }]],
-        body: [
-          [{ content: 'Lokasi', styles: { fontStyle: 'bold' } }, { content: 'Kata Kunci Cocok', styles: { fontStyle: 'bold' } }, { content: 'Bobot Poin', styles: { fontStyle: 'bold' } }],
-          ...tableBody
-        ],
-        theme: 'striped',
-        styles: { font: 'Helvetica', cellPadding: 3, fontSize: 10 },
-        headStyles: { halign: 'center', fillColor: [127, 140, 141] },
-        columnStyles: { 0: { fontStyle: 'bold' }, 2: { halign: 'center' } },
-        didDrawPage: (data) => {
-            pageFooter(data);
-        }
+      head: [[{ 
+        content: `Analisis #${index + 1}: ${safeText(item.judul, 'Tanpa Judul')} (Total: ${item.score.toFixed(3)})`, 
+        colSpan: 4, 
+        styles: { halign: 'center', fillColor: [44, 62, 80] } 
+      }]],
+      body: [
+        [{ content: 'Komponen', styles: { fontStyle: 'bold' } }, { content: 'Kata Ditemukan', styles: { fontStyle: 'bold' } }, { content: 'Perhitungan', styles: { fontStyle: 'bold' } }, { content: 'Skor Komponen', styles: { fontStyle: 'bold' } }],
+        ...tableBody
+      ],
+      startY: currentY,
+      theme: 'grid',
+      didDrawPage: addFooter
     });
-    
-    currentY = doc.lastAutoTable.finalY;
+    currentY = doc.lastAutoTable.finalY + 10;
   });
+
+  // ... (kode kesimpulan, rekomendasi, dan approval tetap sama) ...
+  currentY = doc.lastAutoTable.finalY || currentY;
+  currentY = checkAndAddPage(currentY, 150);
+  currentY += 15;
+  
+  doc.setFontSize(12).setTextColor(44, 62, 80).text('KESIMPULAN DAN REKOMENDASI', 20, currentY);
+  currentY += 5;
+  doc.setLineWidth(0.5).line(20, currentY, pageWidth - 20, currentY);
+  currentY += 10;
+  
+  const conclusions = [
+    `Pencarian dengan kata kunci "${query}" menghasilkan ${totalBooks} buku yang relevan.`,
+    `Rata-rata skor kesesuaian adalah ${avgScore.toFixed(3)}, menunjukkan tingkat relevansi yang ${avgScore > 0.5 ? 'tinggi' : 'sedang'}.`,
+    `Ditemukan ${searchStats.categoriesFound.size} kategori berbeda, menunjukkan variasi topik yang ${searchStats.categoriesFound.size > 3 ? 'luas' : 'terbatas'}.`,
+  ];
+  
+  doc.setFont('Helvetica', 'bold').setFontSize(10).text('Kesimpulan:', 20, currentY);
+  currentY += 7;
+  doc.setFont('Helvetica', 'normal');
+  conclusions.forEach(conclusion => {
+    doc.text(`- ${conclusion}`, 25, currentY);
+    currentY += 7;
+  });
+
+  currentY += 5;
+  
+  const recommendations = [
+    avgScore < 0.3 ? 'Pertimbangkan untuk memperluas kriteria pencarian atau menggunakan sinonim.' : 'Hasil pencarian cukup baik untuk dijadikan dasar rekomendasi.',
+    searchStats.categoriesFound.size < 3 ? 'Koleksi dapat diperkaya dengan buku dari kategori yang lebih beragam.' : 'Variasi kategori koleksi sudah memadai.',
+    'Prioritaskan pengadaan atau promosi buku dengan skor tertinggi.'
+  ];
+  
+  doc.setFont('Helvetica', 'bold').setFontSize(10).text('Rekomendasi Tindak Lanjut:', 20, currentY);
+  currentY += 7;
+  doc.setFont('Helvetica', 'normal');
+  recommendations.forEach(rec => {
+    doc.text(`- ${rec}`, 25, currentY);
+    currentY += 7;
+  });
+  
+  currentY = checkAndAddPage(currentY, 80);
+  
+  const approvalDate = new Date().toLocaleDateString('id-ID', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  });
+  
+  autoTable(doc, {
+    body: [
+      [`Jakarta Timur, ${approvalDate}`, ''],
+      ['Penanggung Jawab,', 'Mengetahui dan Menyetujui,'],
+      ['Pustakawan/Operator Sistem', 'Kepala Sekolah'],
+      ['\n\n\n\n'],
+      ['PURYANTI, S.Pd.', 'C. RIYANTI SUSILOWATI, M.M.Pd.'],
+      ['NIP. [NIP Pustakawan]', 'NIP. [NIP Kepala Sekolah]']
+    ],
+    startY: currentY,
+    theme: 'plain',
+    styles: { halign: 'center', fontSize: 10 },
+    didDrawPage: addFooter
+  });
+
+  currentY = pageHeight - 35;
+  doc.setFontSize(8).setFont('Helvetica', 'italic').setTextColor(150, 150, 150);
+  doc.text('Laporan ini dibuat secara otomatis oleh sistem dan diverifikasi oleh Pustakawan.', pageWidth / 2, currentY, { align: 'center' });
 
   if (typeof doc.putTotalPages === 'function') {
     doc.putTotalPages(totalPagesExp);
   }
 
-  doc.save(`Laporan Rekomendasi - ${query}.pdf`);
+  const fileName = `Laporan_Rekomendasi_${query.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+  doc.save(fileName);
 };
