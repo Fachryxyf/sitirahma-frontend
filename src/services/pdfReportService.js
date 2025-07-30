@@ -63,26 +63,13 @@ const addHeader = () => {
     return 45;
 };
 
-  const addFooter = (data) => {
-    const pageNumber = data.pageNumber;
+  // MODIFIED: Simplified footer without timestamp and page number
+  const addFooter = () => {
+    // Only add a simple line separator, remove timestamp and page number
     const margin = 20;
-    const currentDate = new Date().toLocaleDateString('id-ID', {
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-    });
-    const currentTime = new Date().toLocaleTimeString('id-ID', {
-      hour: '2-digit', minute: '2-digit', second: '2-digit'
-    });
-    doc.setDrawColor(150, 150, 150);
-    doc.setLineWidth(0.3);
-    doc.line(margin, pageHeight - 25, pageWidth - margin, pageHeight - 25);
-    doc.setFontSize(9);
-    doc.setTextColor(100);
-    doc.text(`Dicetak pada: ${currentDate} pukul ${currentTime}`, margin, pageHeight - 20);
-    let pageStr = `Halaman ${pageNumber}`;
-    if (typeof doc.putTotalPages === 'function') {
-      pageStr += ` dari ${totalPagesExp}`;
-    }
-    doc.text(pageStr, pageWidth - margin, pageHeight - 20, { align: 'right' });
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.2);
+    doc.line(margin, pageHeight - 15, pageWidth - margin, pageHeight - 15);
   };
   
   const checkAndAddPage = (currentY, requiredSpace) => {
@@ -192,7 +179,7 @@ const addHeader = () => {
     currentY = doc.lastAutoTable.finalY + 10;
   });
 
-  // ... (kode kesimpulan, rekomendasi, dan approval tetap sama) ...
+  // KESIMPULAN DAN REKOMENDASI
   currentY = doc.lastAutoTable.finalY || currentY;
   currentY = checkAndAddPage(currentY, 150);
   currentY += 15;
@@ -234,29 +221,41 @@ const addHeader = () => {
   
   currentY = checkAndAddPage(currentY, 80);
   
-  const approvalDate = new Date().toLocaleDateString('id-ID', {
+  // MODIFIED: Single signature using table trick (empty left column, content in right)
+  const currentDate = new Date();
+  const approvalDate = currentDate.toLocaleDateString('id-ID', {
     year: 'numeric', month: 'long', day: 'numeric'
   });
   
+  // Add space before signature
+  currentY += 20;
+  
   autoTable(doc, {
     body: [
-      [`Jakarta Timur, ${approvalDate}`, ''],
-      ['Penanggung Jawab,', 'Mengetahui dan Menyetujui,'],
-      ['Pustakawan/Operator Sistem', 'Kepala Sekolah'],
-      ['\n\n\n\n'],
-      ['PURYANTI, S.Pd.', 'C. RIYANTI SUSILOWATI, M.M.Pd.'],
-      ['NIP. [NIP Pustakawan]', 'NIP. [NIP Kepala Sekolah]']
+      ['', `Jakarta, ${approvalDate}`],
+      ['', 'Penanggung Jawab Perpustakaan,'],
+      ['', ''],
+      ['', ''],
+      ['', ''],
+      ['', ''],
+      ['', 'PURYANTI, S.Pd.'],
+      ['', 'NIP. 196901102022212002']
     ],
     startY: currentY,
     theme: 'plain',
-    styles: { halign: 'center', fontSize: 10 },
+    styles: { 
+      fontSize: 10,
+      cellPadding: 2
+    },
+    columnStyles: {
+      0: { cellWidth: 100 }, // Left column (empty) - reduced from 120
+      1: { halign: 'center', cellWidth: 70 } // Right column (signature) - reduced from 80
+    },
     didDrawPage: addFooter
   });
 
-  currentY = pageHeight - 35;
-  doc.setFontSize(8).setFont('Helvetica', 'italic').setTextColor(150, 150, 150);
-  doc.text('Laporan ini dibuat secara otomatis oleh sistem dan diverifikasi oleh Pustakawan.', pageWidth / 2, currentY, { align: 'center' });
-
+  // Remove the automatic disclaimer at bottom
+  
   if (typeof doc.putTotalPages === 'function') {
     doc.putTotalPages(totalPagesExp);
   }
