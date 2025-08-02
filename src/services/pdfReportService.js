@@ -97,7 +97,7 @@ export const generatePdfReport = (searchResult) => {
     
     // Text kanan: "Halaman X dari Y"
     const pageInfo = `Halaman ${doc.internal.getCurrentPageInfo().pageNumber} dari ${totalPagesExp}`;
-    doc.text(pageInfo, pageWidth - 20, pageHeight - 10, { align: 'right' });
+    doc.text(pageInfo, pageWidth - 10, pageHeight - 10, { align: 'right' });
   };
   
   const checkAndAddPage = (currentY, requiredSpace) => {
