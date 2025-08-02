@@ -24,7 +24,6 @@ export const generatePdfReport = (searchResult) => {
   const pageWidth = doc.internal.pageSize.getWidth();
   const safeText = (text, fallback = 'N/A') => text || fallback;
 
-  // ... (kode header, footer, dan lainnya tetap sama) ...
   const schoolData = {
     name: 'SMPN 257 JAKARTA TIMUR',
     address: 'Jalan Kel. Rambutan No.50, RT.4/RW.3, Rambutan, Ciracas',
@@ -33,7 +32,7 @@ export const generatePdfReport = (searchResult) => {
     website: 'Website: https://smpn257jkt.sch.id/'
   };
 
-const addHeader = () => {
+  const addHeader = () => {
     doc.setFillColor(255, 255, 255);
     doc.rect(0, 0, pageWidth, 45, 'F');
 
@@ -61,15 +60,44 @@ const addHeader = () => {
     doc.setLineWidth(0.5);
     doc.line(20, 40, pageWidth - 20, 40);
     return 45;
-};
+  };
 
-  // MODIFIED: Simplified footer without timestamp and page number
-  const addFooter = () => {
-    // Only add a simple line separator, remove timestamp and page number
-    const margin = 20;
-    doc.setDrawColor(200, 200, 200);
-    doc.setLineWidth(0.2);
-    doc.line(margin, pageHeight - 15, pageWidth - margin, pageHeight - 15);
+  // Updated footer function dengan parameter isLastPage
+  const addFooter = (isLastPage = false) => {
+    // Tambahkan disclaimer HANYA di halaman terakhir
+    if (isLastPage) {
+      doc.setFont('Helvetica', 'italic');
+      doc.setFontSize(9);
+      doc.setTextColor(100, 100, 100); // Warna abu-abu untuk disclaimer
+      doc.text('Laporan ini dibuat secara otomatis oleh sistem dan diverifikasi oleh Pustakawan.', pageWidth / 2, pageHeight - 20, { align: 'center' });
+    }
+    
+    // Timestamp di kiri bawah dengan format yang tepat
+    const currentDate = new Date();
+    const timestamp = currentDate.toLocaleDateString('id-ID', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    
+    // Format waktu dengan detik menggunakan titik sebagai separator (HH.MM.SS)
+    const hours = currentDate.getHours().toString().padStart(2, '0');
+    const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+    const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+    const time = `${hours}.${minutes}.${seconds}`;
+    
+    // Set font dan warna untuk footer timestamp dan halaman
+    doc.setFont('Helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(0, 0, 0);
+    
+    // Text kiri: "Dicetak pada: [tanggal] pukul [waktu]"
+    doc.text(`Dicetak pada: ${timestamp} pukul ${time}`, 20, pageHeight - 10);
+    
+    // Text kanan: "Halaman X dari Y"
+    const pageInfo = `Halaman ${doc.internal.getCurrentPageInfo().pageNumber} dari ${totalPagesExp}`;
+    doc.text(pageInfo, pageWidth - 20, pageHeight - 10, { align: 'right' });
   };
   
   const checkAndAddPage = (currentY, requiredSpace) => {
@@ -221,7 +249,7 @@ const addHeader = () => {
   
   currentY = checkAndAddPage(currentY, 80);
   
-  // MODIFIED: Single signature using table trick (empty left column, content in right)
+  // Single signature using table trick (empty left column, content in right)
   const currentDate = new Date();
   const approvalDate = currentDate.toLocaleDateString('id-ID', {
     year: 'numeric', month: 'long', day: 'numeric'
@@ -248,14 +276,16 @@ const addHeader = () => {
       cellPadding: 2
     },
     columnStyles: {
-      0: { cellWidth: 100 }, // Left column (empty) - reduced from 120
-      1: { halign: 'center', cellWidth: 70 } // Right column (signature) - reduced from 80
+      0: { cellWidth: 100 }, // Left column (empty)
+      1: { halign: 'center', cellWidth: 70 } // Right column (signature)
     },
-    didDrawPage: addFooter
+    didDrawPage: addFooter // Footer untuk halaman-halaman sebelumnya
   });
 
-  // Remove the automatic disclaimer at bottom
-  
+  // Panggil footer untuk halaman terakhir dengan disclaimer
+  addFooter(true);
+
+  // Replace placeholder dengan jumlah halaman sebenarnya
   if (typeof doc.putTotalPages === 'function') {
     doc.putTotalPages(totalPagesExp);
   }
